@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="danil" id="27-18-01-12-20">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="public" tableName="user"/>
+        </preConditions>
+        <dropTable cascadeConstraints="true"
+                   schemaName="public"
+                   tableName="user"/>
+    </changeSet>
+
+    <changeSet author="danil" id="28-18-01-12-20">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="public" tableName="vkei_sequence"/>
+        </preConditions>
+        <dropTable cascadeConstraints="true"
+                   schemaName="public"
+                   tableName="vkei_sequence"/>
+    </changeSet>
+
+    <changeSet author="danil" id="43-15-02-12-20">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="public" tableName="user_friendship"/>
+        </preConditions>
+        <dropTable cascadeConstraints="true"
+                   schemaName="public"
+                   tableName="user_friendship"/>
+    </changeSet>
+
+
+</databaseChangeLog>
