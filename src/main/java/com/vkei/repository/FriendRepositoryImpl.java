@@ -1,15 +1,14 @@
 package com.vkei.repository;
 
 import com.vkei.model.User;
+import com.vkei.model.UserInfo;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -32,16 +31,31 @@ public class FriendRepositoryImpl implements FriendRepository {
 
     //TODO:доделать
     @Override
-    public List<User> findFriendsByUserId(Long userId) {
-        EntityGraph<User> userGraph = em.createEntityGraph(User.class);
-        userGraph.addAttributeNodes("friends");
+    public List<UserInfo> findFriendsByUserId(Long userId) {
+//        EntityGraph<User> userGraph = em.createEntityGraph(User.class);
+//        userGraph.addAttributeNodes("friends");
+//
+//        CriteriaBuilder cb = em.getCriteriaBuilder();
+//        CriteriaQuery<User> cr = cb.createQuery(User.class);
+//        Root<User> root = cr.from(User.class);
+//        cr.select(root).where(cb.equal(root.get("id"), userId));
+//
+//        TypedQuery<User> query = em.createQuery(cr).setHint("javax.persistence.loadgraph", userGraph);
+//        return query.getResultList().get(0).getFriends();
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<User> cr = cb.createQuery(User.class);
-        Root<User> root = cr.from(User.class);
-        cr.select(root).where(cb.equal(root.get("id"), userId));
+        CriteriaQuery<UserInfo> cq = cb.createQuery(UserInfo.class);
+        Root<User> u = cq.from(User.class);
+        cq.select(
+                cb.construct(
+                        UserInfo.class,
+                        u.get("friends")
+                )
+        ).where(cb.equal(u.get("id"),userId));
 
-        TypedQuery<User> query = em.createQuery(cr).setHint("javax.persistence.loadgraph", userGraph);
-        return query.getResultList().get(0).getFriends();
+        TypedQuery<UserInfo> query = em.createQuery(cq);
+        List<UserInfo> resultList = query.getResultList();
+
+        return resultList;
     }
 }

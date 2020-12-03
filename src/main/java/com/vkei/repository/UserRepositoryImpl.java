@@ -109,7 +109,6 @@ public class UserRepositoryImpl implements UserRepository {
         CriteriaQuery<User> cr = cb.createQuery(User.class);
 
         Root<User> root = cr.from(User.class);
-        root.fetch("friends", JoinType.LEFT);
         cr.select(root);
 
         TypedQuery<User> query = em.createQuery(cr).setHint("javax.persistence.loadgraph",userGraph);

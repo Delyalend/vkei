@@ -2,6 +2,7 @@ package com.vkei.controller;
 
 import com.vkei.exception.NoSuchUserException;
 import com.vkei.model.User;
+import com.vkei.model.UserInfo;
 import com.vkei.repository.UserRepository;
 import com.vkei.service.FriendService;
 import org.springframework.http.HttpStatus;
@@ -29,10 +30,13 @@ public class FriendController {
 
     @GetMapping("users/{id}/friends")
     @Transactional
-    public List<User> getFriendsByUserId(@PathVariable Long id) {
+    public List<UserInfo> getFriendsByUserId(@PathVariable Long id) {
         Optional<User> user = userRepository.findById(id);
 
         if (user.isPresent()) {
+            List<UserInfo> friendsByUserId = friendService.getFriendsByUserId(id);
+            friendsByUserId.forEach(friend ->
+                    System.out.println(friend));
             return friendService.getFriendsByUserId(id);
         } else {
             throw new NoSuchUserException(id);

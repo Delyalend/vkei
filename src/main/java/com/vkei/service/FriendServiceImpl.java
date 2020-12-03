@@ -1,6 +1,6 @@
 package com.vkei.service;
 
-import com.vkei.model.User;
+import com.vkei.model.UserInfo;
 import com.vkei.repository.FriendRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,8 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<User> getFriendsByUserId(Long userId) {
-        return friendRepository.findFriendsByUserId(userId);
+    public List<UserInfo> getFriendsByUserId(Long userId) {
+        List<UserInfo> friendsByUserId = friendRepository.findFriendsByUserId(userId);
+        return friendsByUserId;
     }
 }
