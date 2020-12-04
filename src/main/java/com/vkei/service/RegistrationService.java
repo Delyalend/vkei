@@ -1,7 +1,9 @@
 package com.vkei.service;
 
+import com.vkei.dto.UserRegistrationDto;
+
 public interface RegistrationService {
 
-    Long registerUser(String login, String mail, String password);
+    Long registerUser(UserRegistrationDto dto);
 
 }

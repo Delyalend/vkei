@@ -1,19 +1,29 @@
 package com.vkei.repository;
 
-import com.vkei.model.User;
-import com.vkei.model.UserInfo;
+import com.vkei.dto.FriendDto;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.Query;
+import javax.persistence.Tuple;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class FriendRepositoryImpl implements FriendRepository {
+
+
+    //language=sql
+    private final String get_friend_info =
+            "select u.id as id, u.login as login, u.mail as mail " +
+                    "from public.user u " +
+                    "left join user_friendship uf on u.id = uf.second_user_id " +
+                    "where uf.first_user_id = ?";
+
+    //language=sql
+    private final String add_friend_to_user =
+            "insert into user_friendship values(?,?)";
 
     private EntityManager em;
 
@@ -24,38 +34,30 @@ public class FriendRepositoryImpl implements FriendRepository {
     @Override
     @Transactional
     public void addFriendToUser(Long friendId, Long userId) {
-        User userProxy = em.getReference(User.class, userId);
-        User friendProxy = em.getReference(User.class, friendId);
-        userProxy.getFriends().add(friendProxy);
+        em.createNativeQuery(add_friend_to_user)
+                .setParameter(1, userId)
+                .setParameter(2, friendId).executeUpdate();
     }
 
-    //TODO:доделать
     @Override
-    public List<UserInfo> findFriendsByUserId(Long userId) {
-//        EntityGraph<User> userGraph = em.createEntityGraph(User.class);
-//        userGraph.addAttributeNodes("friends");
-//
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<User> cr = cb.createQuery(User.class);
-//        Root<User> root = cr.from(User.class);
-//        cr.select(root).where(cb.equal(root.get("id"), userId));
-//
-//        TypedQuery<User> query = em.createQuery(cr).setHint("javax.persistence.loadgraph", userGraph);
-//        return query.getResultList().get(0).getFriends();
+    @Transactional
+    public List<FriendDto> findFriendsByUserId(Long userId) {
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<UserInfo> cq = cb.createQuery(UserInfo.class);
-        Root<User> u = cq.from(User.class);
-        cq.select(
-                cb.construct(
-                        UserInfo.class,
-                        u.get("friends")
-                )
-        ).where(cb.equal(u.get("id"),userId));
+        Query query = em.createNativeQuery(get_friend_info, Tuple.class);
+        List<Tuple> friendsInfo = query
+                .setParameter(1, userId)
+                .getResultList();
 
-        TypedQuery<UserInfo> query = em.createQuery(cq);
-        List<UserInfo> resultList = query.getResultList();
-
-        return resultList;
+        List<FriendDto> friendDtos = new ArrayList<>();
+        friendsInfo.forEach(
+                friendInfo -> {
+                    FriendDto friendDto = new FriendDto(
+                            ((Integer) friendInfo.get("id")).longValue(),
+                            (String) friendInfo.get("mail"),
+                            (String) friendInfo.get("login"));
+                    friendDtos.add(friendDto);
+                }
+        );
+        return friendDtos;
     }
 }

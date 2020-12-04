@@ -1,6 +1,6 @@
 package com.vkei.service;
 
-import com.vkei.model.UserInfo;
+import com.vkei.dto.FriendDto;
 
 import java.util.List;
 
@@ -8,5 +8,5 @@ public interface FriendService {
 
     void addFriendToUser(Long friendId, Long userId);
 
-    List<UserInfo> getFriendsByUserId(Long userId);
+    List<FriendDto> getFriendDtos(Long userId);
 }

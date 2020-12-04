@@ -47,6 +47,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional
     public Optional<User> findByRegistrationDto(UserRegistrationDto dto) {
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> cr = cb.createQuery(User.class);
 
@@ -73,7 +74,7 @@ public class UserRepositoryImpl implements UserRepository {
         CriteriaQuery<User> cr = cb.createQuery(User.class);
         Root<User> root = cr.from(User.class);
         root.fetch("friends", JoinType.LEFT);
-        cr.select(root).where(cb.equal(root.get("id"),id));
+        cr.select(root).where(cb.equal(root.get("id"), id));
 
         TypedQuery<User> query = em.createQuery(cr);
         List<User> resultList = query.getResultList();
@@ -111,7 +112,7 @@ public class UserRepositoryImpl implements UserRepository {
         Root<User> root = cr.from(User.class);
         cr.select(root);
 
-        TypedQuery<User> query = em.createQuery(cr).setHint("javax.persistence.loadgraph",userGraph);
+        TypedQuery<User> query = em.createQuery(cr).setHint("javax.persistence.loadgraph", userGraph);
         return query.getResultList();
 
     }

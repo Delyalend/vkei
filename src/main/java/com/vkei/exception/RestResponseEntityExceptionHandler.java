@@ -38,7 +38,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({NoSuchUserException.class})
     public ResponseEntity<AwesomeException> handleNoSuchUserException(Exception ex) {
-        Long userId = ((NoSuchUserException)ex).getUserId();
+        Long userId = ((NoSuchUserException) ex).getUserId();
 
         String msgEx = "User with id = " + userId + " not found";
 
