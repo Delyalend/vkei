@@ -20,13 +20,19 @@ public class UserRegistrationDto {
     @NotNull
     private String login;
 
+    @Size(min = 5, max = 255)
+    @NotNull
+    private String location;
+
     @JsonCreator
     public UserRegistrationDto(@JsonProperty("mail") String mail,
                                @JsonProperty("password") String password,
-                               @JsonProperty("login") String login) {
+                               @JsonProperty("login") String login,
+                               @JsonProperty("location") String location) {
         this.login = login;
         this.mail = mail;
         this.password = password;
+        this.location = location;
     }
 
     public String getMail() {
@@ -39,5 +45,9 @@ public class UserRegistrationDto {
 
     public String getLogin() {
         return login;
+    }
+
+    public String getLocation() {
+        return location;
     }
 }

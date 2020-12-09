@@ -49,6 +49,42 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     }
 
+    @ExceptionHandler({SubjectAlreadyExistsException.class})
+    public ResponseEntity<AwesomeException> handleSubjectAlreadyExistsException(Exception ex) {
+
+        String titleSubject = ((SubjectAlreadyExistsException) ex).getTitleSubject();
+
+        String msgEx = "Subject with title = " + titleSubject + " is already exists";
+
+        return new ResponseEntity<AwesomeException>(
+                new AwesomeException(msgEx),
+                HttpStatus.BAD_REQUEST
+        );
+
+    }
+
+    @ExceptionHandler({SubjectIsAlreadyExistsInCollectionException.class})
+    public ResponseEntity<AwesomeException> handleSubjectIsAlreadyExistsInCollectionException(Exception ex) {
+        String titleSubject = ((SubjectIsAlreadyExistsInCollectionException) ex).getTitleSubject();
+        String msgEx = "Subject with title = " + titleSubject + " is already exists in collection";
+
+        return new ResponseEntity<AwesomeException>(
+                new AwesomeException(msgEx),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler({SubjectExistsInOppositeCategoryException.class})
+    public ResponseEntity<AwesomeException> handleSubjectExistsInOppositeCategoryException(Exception ex) {
+        String titleSubject = ((SubjectExistsInOppositeCategoryException) ex).getTitleSubject();
+        String msgEx = "Subject with title = " + titleSubject + " is already exists in opposite collection";
+
+        return new ResponseEntity<AwesomeException>(
+                new AwesomeException(msgEx),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
     @Data
     @AllArgsConstructor
     private static class AwesomeException {

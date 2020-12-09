@@ -19,6 +19,9 @@
             <column name="mail" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="location" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         <rollback>
             <dropTable tableName="user"/>

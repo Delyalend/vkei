@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="danil" id="43-10-07-12-20">
+        <createTable tableName="subject" schemaName="public">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="subject"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="danil" id="00-11-07-12-20">
+
+        <createTable tableName="subject_easy" schemaName="public">
+            <column name="user_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_user_id" references="user(id)"/>
+            </column>
+            <column name="subject_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_subject_id" references="subject(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="subject_hard" schemaName="public">
+            <column name="user_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_user_id" references="user(id)"/>
+            </column>
+            <column name="subject_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_subject_id" references="subject(id)"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="subject_easy"/>
+            <dropTable tableName="subject_hard"/>
+        </rollback>
+    </changeSet>
+
+
+</databaseChangeLog>

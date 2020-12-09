@@ -18,8 +18,10 @@ public class FriendController {
     }
 
     @GetMapping("users/{id}/friends")
-    public List<FriendDto> getFriendsByUserId(@PathVariable Long id) {
-        return friendService.getFriendDtos(id);
+    public List<FriendDto> getFriendsByUserId(@PathVariable Long id,
+                                              @RequestParam int firstResult,
+                                              @RequestParam int maxResult) {
+        return friendService.getFriendDtos(id, firstResult, maxResult);
     }
 
     @PostMapping(
