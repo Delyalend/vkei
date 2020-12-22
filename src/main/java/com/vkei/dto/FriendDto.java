@@ -28,4 +28,5 @@ public class FriendDto {
     public String getLogin() {
         return login;
     }
+
 }

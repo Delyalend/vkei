@@ -1,25 +1,24 @@
 package com.vkei.repository;
 
 import com.vkei.dto.FriendDto;
+import com.vkei.model.User;
+import com.vkei.model.meta.User_;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class FriendRepositoryImpl implements FriendRepository {
-
-
-    //language=sql
-    private final String get_friend_info =
-            "select u.id as id, u.login as login, u.mail as mail " +
-                    "from public.user u " +
-                    "left join user_friendship uf on u.id = uf.second_user_id " +
-                    "where uf.first_user_id = ?";
 
     //language=sql
     private final String add_friend_to_user =
@@ -27,6 +26,7 @@ public class FriendRepositoryImpl implements FriendRepository {
 
     private EntityManager em;
 
+    @Autowired
     public FriendRepositoryImpl(EntityManager em) {
         this.em = em;
     }
@@ -41,23 +41,32 @@ public class FriendRepositoryImpl implements FriendRepository {
 
     @Override
     @Transactional
-    public List<FriendDto> findFriendsByUserId(Long userId) {
+    public List<FriendDto> findFriendsByUserId(Long userId, int firstResult, int maxResult) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
 
-        Query query = em.createNativeQuery(get_friend_info, Tuple.class);
-        List<Tuple> friendsInfo = query
-                .setParameter(1, userId)
-                .getResultList();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> userRoot = cq.from(User.class);
+        cq.select(userRoot).where(cb.equal(userRoot.get(User_.ID), userId));
+
+        Set<User> friends = em.createQuery(cq)
+                .setFirstResult(firstResult)
+                .setMaxResults(maxResult)
+                .getResultList()
+                .get(0)
+                .getFriends();
 
         List<FriendDto> friendDtos = new ArrayList<>();
-        friendsInfo.forEach(
-                friendInfo -> {
-                    FriendDto friendDto = new FriendDto(
-                            ((Integer) friendInfo.get("id")).longValue(),
-                            (String) friendInfo.get("mail"),
-                            (String) friendInfo.get("login"));
+
+
+        friends.forEach(
+                friend -> {
+                    FriendDto friendDto = new FriendDto(friend.getId(),
+                            friend.getMail(),
+                            friend.getLogin());
                     friendDtos.add(friendDto);
                 }
         );
+
         return friendDtos;
     }
 }

@@ -42,10 +42,11 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<FriendDto> getFriendDtos(Long userId) {
+    @Transactional
+    public List<FriendDto> getFriendDtos(Long userId, int firstResult, int maxResult) {
         Optional<User> user = userRepo.findById(userId);
         if (user.isPresent()) {
-            return friendRepo.findFriendsByUserId(userId);
+            return friendRepo.findFriendsByUserId(userId, firstResult, maxResult);
         } else {
             throw new NoSuchUserException(userId);
         }

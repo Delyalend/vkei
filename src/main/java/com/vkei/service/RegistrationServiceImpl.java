@@ -30,7 +30,16 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new UserAlreadyExistsException(dto, user.get());
         }
 
-        return userRepository.save(dto.getLogin(), dto.getMail(), dto.getPassword());
+        User newUser = User.builder()
+                .login(dto.getLogin())
+                .mail(dto.getMail())
+                .location(dto.getLocation())
+                .password(dto.getPassword())
+                .build();
+
+
+
+        return userRepository.save(newUser);
     }
 
 }

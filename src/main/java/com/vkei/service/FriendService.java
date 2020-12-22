@@ -8,5 +8,5 @@ public interface FriendService {
 
     void addFriendToUser(Long friendId, Long userId);
 
-    List<FriendDto> getFriendDtos(Long userId);
+    List<FriendDto> getFriendDtos(Long userId, int firstResult, int maxResult);
 }

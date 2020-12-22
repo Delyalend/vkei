@@ -14,15 +14,6 @@
                    tableName="user"/>
     </changeSet>
 
-    <changeSet author="danil" id="28-18-01-12-20">
-        <preConditions onFail="MARK_RAN">
-            <tableExists schemaName="public" tableName="vkei_sequence"/>
-        </preConditions>
-        <dropTable cascadeConstraints="true"
-                   schemaName="public"
-                   tableName="vkei_sequence"/>
-    </changeSet>
-
     <changeSet author="danil" id="43-15-02-12-20">
         <preConditions onFail="MARK_RAN">
             <tableExists schemaName="public" tableName="user_friendship"/>
@@ -30,6 +21,33 @@
         <dropTable cascadeConstraints="true"
                    schemaName="public"
                    tableName="user_friendship"/>
+    </changeSet>
+
+    <changeSet author="danil" id="33-11-07-12-20">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="public" tableName="subject"/>
+        </preConditions>
+        <dropTable cascadeConstraints="true"
+                   schemaName="public"
+                   tableName="subject"/>
+    </changeSet>
+
+    <changeSet author="danil" id="34-11-07-12-20">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="public" tableName="subject_easy"/>
+        </preConditions>
+        <dropTable cascadeConstraints="true"
+                   schemaName="public"
+                   tableName="subject_easy"/>
+    </changeSet>
+
+    <changeSet author="danil" id="35-11-07-12-20">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="public" tableName="subject_hard"/>
+        </preConditions>
+        <dropTable cascadeConstraints="true"
+                   schemaName="public"
+                   tableName="subject_hard"/>
     </changeSet>
 
 

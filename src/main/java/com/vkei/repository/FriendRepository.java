@@ -8,5 +8,5 @@ public interface FriendRepository {
 
     void addFriendToUser(Long friendId, Long userId);
 
-    List<FriendDto> findFriendsByUserId(Long userId);
+    List<FriendDto> findFriendsByUserId(Long userId, int firstResult, int maxResult);
 }

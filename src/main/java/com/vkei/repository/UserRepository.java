@@ -15,6 +15,7 @@ public interface UserRepository {
 
     Optional<User> findById(Long id);
 
-    Long save(String login, String mail, String password);
+    //Long save(String login, String mail, String password);
+    Long save(User user);
 
 }
